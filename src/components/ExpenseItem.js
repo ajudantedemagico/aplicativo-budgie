@@ -1,43 +1,48 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
+// Importa o pacote de ícones — já vem com o Expo, sem instalar nada!
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
+// Agora cada categoria tem um ícone em vez de emoji
+// 'icone' é o nome exato do ícone no MaterialCommunityIcons
 const CATEGORIAS = {
-  alimentação: { emoji: '🍕', cor: '#fde8ef' },
-  transporte:  { emoji: '🚌', cor: '#e8f0fd' },
-  lazer:       { emoji: '🎮', cor: '#fdf4e8' },
-  estudos:     { emoji: '📚', cor: '#edfde8' },
-  moradia:     { emoji: '🏠', cor: '#f0e8fd' },
-  saúde:       { emoji: '💊', cor: '#e8fdfa' },
-  outros:      { emoji: '✦',  cor: '#f5f5f5' },
+  alimentação: { icone: 'food-fork-drink',                cor: '#fde8ef', corIcone: '#c45b7a' },
+  transporte:  { icone: 'bus',                            cor: '#e8f0fd', corIcone: '#5b7ac4' },
+  lazer:       { icone: 'gamepad-variant-outline',        cor: '#fdf4e8', corIcone: '#c49d5b' },
+  estudos:     { icone: 'book-open-outline',              cor: '#edfde8', corIcone: '#5bc47a' },
+  moradia:     { icone: 'home-outline',                   cor: '#f0e8fd', corIcone: '#8a5bc4' },
+  saúde:       { icone: 'heart-pulse',                    cor: '#e8fdfa', corIcone: '#5bb4c4' },
+  roupas:      { icone: 'hanger',                         cor: '#fde8f4', corIcone: '#c45b9a' },
+  outros:      { icone: 'dots-horizontal-circle-outline', cor: '#f5f5f5', corIcone: '#9e9891' },
 };
 
 export default function ExpenseItem({ gasto }) {
 
-  
+  // Busca as configurações da categoria — usa 'outros' se não encontrar
   const cat = CATEGORIAS[gasto.categoria] || CATEGORIAS['outros'];
 
   return (
     <View style={styles.container}>
 
-      {}
-      <View style={[
-        styles.catDot,
-        
-        { backgroundColor: cat.cor }
-      ]}>
-        <Text style={styles.emoji}>{cat.emoji}</Text>
+      {/* Bolinha colorida com ícone da categoria */}
+      <View style={[styles.catDot, { backgroundColor: cat.cor }]}>
+        {/* MaterialCommunityIcons recebe o nome do ícone, tamanho e cor */}
+        <MaterialCommunityIcons
+          name={cat.icone}
+          size={20}
+          color={cat.corIcone}
+        />
       </View>
 
-      {}
+      {/* Descrição e categoria */}
       <View style={styles.info}>
         <Text style={styles.descricao}>{gasto.descricao}</Text>
         <Text style={styles.categoria}>{gasto.categoria}</Text>
       </View>
 
-      {}
+      {/* Valor e data */}
       <View style={styles.direita}>
-        {}
         <Text style={styles.valor}>R$ {gasto.valor.toFixed(2)}</Text>
         <Text style={styles.data}>{gasto.data}</Text>
       </View>
@@ -51,8 +56,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0ede8',
     borderRadius: 16,
     padding: 12,
-    flexDirection: 'row', 
-    alignItems: 'center', 
+    flexDirection: 'row',
+    alignItems: 'center',
     shadowColor: '#d8d4ce',
     shadowOffset: { width: 3, height: 3 },
     shadowOpacity: 1,
@@ -62,16 +67,13 @@ const styles = StyleSheet.create({
   catDot: {
     width: 42,
     height: 42,
-    borderRadius: 21, 
+    borderRadius: 21,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
   },
-  emoji: {
-    fontSize: 18,
-  },
   info: {
-    flex: 1, 
+    flex: 1,
   },
   descricao: {
     fontSize: 14,
@@ -84,7 +86,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   direita: {
-    alignItems: 'flex-end', 
+    alignItems: 'flex-end',
   },
   valor: {
     fontSize: 14,

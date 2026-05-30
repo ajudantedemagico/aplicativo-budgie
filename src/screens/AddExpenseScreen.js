@@ -10,17 +10,20 @@ import {
 } from 'react-native';
 
 import { inserirGasto } from '../database/database';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-// Lista de categorias disponíveis para o usuário escolher
+
 const CATEGORIAS = [
-  { nome: 'alimentação', emoji: '🍕', cor: '#fde8ef' },
-  { nome: 'transporte',  emoji: '🚌', cor: '#e8f0fd' },
-  { nome: 'lazer',       emoji: '🎮', cor: '#fdf4e8' },
-  { nome: 'estudos',     emoji: '📚', cor: '#edfde8' },
-  { nome: 'moradia',     emoji: '🏠', cor: '#f0e8fd' },
-  { nome: 'saúde',       emoji: '💊', cor: '#e8fdfa' },
-  { nome: 'outros',      emoji: '✦',  cor: '#f5f5f5' },
+  { nome: 'alimentação', icone: 'food-fork-drink',                cor: '#fde8ef', corIcone: '#c45b7a' },
+  { nome: 'transporte',  icone: 'bus',                            cor: '#e8f0fd', corIcone: '#5b7ac4' },
+  { nome: 'lazer',       icone: 'gamepad-variant-outline',        cor: '#fdf4e8', corIcone: '#c49d5b' },
+  { nome: 'estudos',     icone: 'book-open-outline',              cor: '#edfde8', corIcone: '#5bc47a' },
+  { nome: 'moradia',     icone: 'home-outline',                   cor: '#f0e8fd', corIcone: '#8a5bc4' },
+  { nome: 'saúde',       icone: 'heart-pulse',                    cor: '#e8fdfa', corIcone: '#5bb4c4' },
+  { nome: 'roupas',      icone: 'hanger',                         cor: '#fde8f4', corIcone: '#c45b9a' },
+  { nome: 'outros',      icone: 'dots-horizontal-circle-outline', cor: '#f5f5f5', corIcone: '#9e9891' },
 ];
+
 
 export default function AddExpenseScreen({ navigation }) {
 
@@ -124,21 +127,19 @@ export default function AddExpenseScreen({ navigation }) {
           const selecionada = categoriaSelecionada === cat.nome;
 
           return (
-            <TouchableOpacity
-              key={cat.nome} // key é obrigatório em listas — ajuda o React a identificar cada item
-              style={[
-                styles.chip,
-                // Se selecionada, aplica estilo de chip ativo (afundado)
-                selecionada ? styles.chipAtivo : null,
-                // Cor de fundo vem da categoria
-                { backgroundColor: cat.cor },
-              ]}
-              onPress={() => setCategoriaSelecionada(cat.nome)}
-            >
-              <Text style={styles.chipText}>
-                {cat.emoji} {cat.nome}
-              </Text>
-            </TouchableOpacity>
+<TouchableOpacity
+  key={cat.nome}
+  style={[
+    styles.chip,
+    selecionada ? styles.chipAtivo : null,
+    { backgroundColor: cat.cor },
+  ]}
+  onPress={() => setCategoriaSelecionada(cat.nome)}
+>
+  {/* Ícone no lugar do emoji */}
+  <MaterialCommunityIcons name={cat.icone} size={16} color={cat.corIcone} />
+  <Text style={styles.chipText}> {cat.nome}</Text>
+</TouchableOpacity>
           );
         })}
       </View>
