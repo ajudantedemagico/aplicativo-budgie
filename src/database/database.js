@@ -25,4 +25,8 @@ export const listarGastos =() => {
     return db.getAllSync ('SELECT * FROM gastos ORDER BY id DESC')
 };
 
+export const excluirGasto = (id) => {
+  db.runSync('DELETE FROM gastos WHERE id = ?', [id]);
+};
+
 export default db; 

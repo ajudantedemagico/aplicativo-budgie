@@ -1,11 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-
-// Importa o pacote de ícones — já vem com o Expo, sem instalar nada!
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-// Agora cada categoria tem um ícone em vez de emoji
-// 'icone' é o nome exato do ícone no MaterialCommunityIcons
 const CATEGORIAS = {
   alimentação: { icone: 'food-fork-drink',                cor: '#fde8ef', corIcone: '#c45b7a' },
   transporte:  { icone: 'bus',                            cor: '#e8f0fd', corIcone: '#5b7ac4' },
@@ -17,35 +13,32 @@ const CATEGORIAS = {
   outros:      { icone: 'dots-horizontal-circle-outline', cor: '#f5f5f5', corIcone: '#9e9891' },
 };
 
-export default function ExpenseItem({ gasto }) {
+// Agora recebe também onExcluir — a função de excluir vinda do HomeScreen
+export default function ExpenseItem({ gasto, onExcluir }) {
 
-  // Busca as configurações da categoria — usa 'outros' se não encontrar
   const cat = CATEGORIAS[gasto.categoria] || CATEGORIAS['outros'];
 
   return (
     <View style={styles.container}>
 
-      {/* Bolinha colorida com ícone da categoria */}
       <View style={[styles.catDot, { backgroundColor: cat.cor }]}>
-        {/* MaterialCommunityIcons recebe o nome do ícone, tamanho e cor */}
-        <MaterialCommunityIcons
-          name={cat.icone}
-          size={20}
-          color={cat.corIcone}
-        />
+        <MaterialCommunityIcons name={cat.icone} size={20} color={cat.corIcone} />
       </View>
 
-      {/* Descrição e categoria */}
       <View style={styles.info}>
         <Text style={styles.descricao}>{gasto.descricao}</Text>
         <Text style={styles.categoria}>{gasto.categoria}</Text>
       </View>
 
-      {/* Valor e data */}
       <View style={styles.direita}>
         <Text style={styles.valor}>R$ {gasto.valor.toFixed(2)}</Text>
         <Text style={styles.data}>{gasto.data}</Text>
       </View>
+
+      {/* Botão de excluir — chama a função onExcluir ao tocar */}
+      <TouchableOpacity style={styles.excluirBtn} onPress={onExcluir}>
+        <MaterialCommunityIcons name="trash-can-outline" size={18} color="#d4a0b0" />
+      </TouchableOpacity>
 
     </View>
   );
@@ -87,6 +80,7 @@ const styles = StyleSheet.create({
   },
   direita: {
     alignItems: 'flex-end',
+    marginRight: 10,
   },
   valor: {
     fontSize: 14,
@@ -97,5 +91,8 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: '#b5b0aa',
     marginTop: 2,
+  },
+  excluirBtn: {
+    padding: 6,
   },
 });
