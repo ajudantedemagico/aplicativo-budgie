@@ -1,20 +1,11 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, {useEffect} from 'react';
+import {initDatabase} from './src/database/database';
+import Routes from './src/navigation/routes';
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text> Gestão de Gastos com Budgie</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+  useEffect (() => {
+    initDatabase ();
+  }, []);
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+  return <Routes />;
+}

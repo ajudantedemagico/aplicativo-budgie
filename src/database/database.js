@@ -7,17 +7,17 @@ export const initDatabase =() => {
         CREATE TABLE IF NOT EXISTS gastos (
          id INTEGER PRIMARY KEY AUTOINCREMENT,
          descricao TEXT NOT NULL,
-         categoria TEXT NOT NULL
-         valor REAL NOT NULL
+         categoria TEXT NOT NULL,
+         valor REAL NOT NULL,
          data TEXT NOT NULL
     );
     `);
 };
 
-export const inserirGastos = (gasto) => {
+export const inserirGasto = (gasto) => {
     db.runSync(
         'INSERT INTO gastos (descricao, categoria, valor, data) VALUES (?,?,?,?)',
-        [gastos.descricao, gastos.categoria, gastos.valor, gastos.data]
+        [gasto.descricao, gasto.categoria, gasto.valor, gasto.data]
     );
 };
 
@@ -25,4 +25,4 @@ export const listarGastos =() => {
     return db.getAllSync ('SELECT * FROM gastos ORDER BY id DESC')
 };
 
-export default db;
+export default db; 
