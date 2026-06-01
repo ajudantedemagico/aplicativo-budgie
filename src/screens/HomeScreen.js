@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import {
-  View, Text, FlatList, TouchableOpacity,
-  StyleSheet, Alert,
+  View, Text, FlatList, TouchableOpacity, StyleSheet,Alert,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { listarGastos, excluirGasto } from '../database/database';
 import ExpenseItem from '../components/ExpenseItem';
+import { cores, fontes, neumorfico, neumorficoPequeno } from '../styles/styles';
 
 const CATEGORIAS_FILTRO = [
-  { nome: 'todas',       icone: 'filter-outline',               cor: '#f0ede8', corIcone: '#9e9891' },
-  { nome: 'alimentação', icone: 'food-fork-drink',               cor: '#fde8ef', corIcone: '#EF72A8' },
+  { nome: 'todas',       icone: 'filter-outline',                cor: '#f0ede8', corIcone: '#9e9891' },
+  { nome: 'alimentação', icone: 'food-fork-drink',               cor: '#fde8ef', corIcone: '#c45b7a' },
   { nome: 'transporte',  icone: 'bus',                           cor: '#e8f0fd', corIcone: '#5b7ac4' },
   { nome: 'lazer',       icone: 'gamepad-variant-outline',       cor: '#fdf4e8', corIcone: '#c49d5b' },
   { nome: 'estudos',     icone: 'book-open-outline',             cor: '#edfde8', corIcone: '#5bc47a' },
@@ -27,10 +27,7 @@ const MESES = [
 export default function HomeScreen({ navigation }) {
 
   const [gastos, setGastos] = useState([]);
-
   const [categoriaFiltro, setCategoriaFiltro] = useState('todas');
-
-  
   const [mesFiltro, setMesFiltro] = useState(new Date().getMonth());
   const [anoFiltro, setAnoFiltro] = useState(new Date().getFullYear());
 
@@ -49,27 +46,18 @@ export default function HomeScreen({ navigation }) {
   }, [navigation]);
 
   const mesAnterior = () => {
-    if (mesFiltro === 0) {
-      setMesFiltro(11);
-      setAnoFiltro(anoFiltro - 1);
-    } else {
-      setMesFiltro(mesFiltro - 1);
-    }
+    if (mesFiltro === 0) { setMesFiltro(11); setAnoFiltro(anoFiltro - 1); }
+    else setMesFiltro(mesFiltro - 1);
   };
 
   const proximoMes = () => {
-    if (mesFiltro === 11) {
-      setMesFiltro(0);
-      setAnoFiltro(anoFiltro + 1);
-    } else {
-      setMesFiltro(mesFiltro + 1);
-    }
+    if (mesFiltro === 11) { setMesFiltro(0); setAnoFiltro(anoFiltro + 1); }
+    else setMesFiltro(mesFiltro + 1);
   };
 
   const gastosFiltrados = gastos.filter((gasto) => {
-
     const partes = gasto.data.split('/');
-    const mesGasto = parseInt(partes[1]) - 1; 
+    const mesGasto = parseInt(partes[1]) - 1;
     const anoGasto = parseInt(partes[2]);
     const mesOk = mesGasto === mesFiltro && anoGasto === anoFiltro;
     const catOk = categoriaFiltro === 'todas' || gasto.categoria === categoriaFiltro;
@@ -86,11 +74,8 @@ export default function HomeScreen({ navigation }) {
         { text: 'cancelar', style: 'cancel' },
         {
           text: 'excluir',
-          style: 'destructive', 
-          onPress: () => {
-            excluirGasto(id);
-            carregarGastos(); 
-          },
+          style: 'destructive',
+          onPress: () => { excluirGasto(id); carregarGastos(); },
         },
       ]
     );
@@ -102,15 +87,11 @@ export default function HomeScreen({ navigation }) {
       {/* Navegação de mês */}
       <View style={styles.mesFiltro}>
         <TouchableOpacity style={styles.setaMes} onPress={mesAnterior}>
-          <MaterialCommunityIcons name="chevron-left" size={22} color="#5a5550" />
+          <MaterialCommunityIcons name="chevron-left" size={22} color={cores.texto} />
         </TouchableOpacity>
-
-        <Text style={styles.mesTexto}>
-          {MESES[mesFiltro]} {anoFiltro}
-        </Text>
-
+        <Text style={styles.mesTexto}>{MESES[mesFiltro]} {anoFiltro}</Text>
         <TouchableOpacity style={styles.setaMes} onPress={proximoMes}>
-          <MaterialCommunityIcons name="chevron-right" size={22} color="#5a5550" />
+          <MaterialCommunityIcons name="chevron-right" size={22} color={cores.texto} />
         </TouchableOpacity>
       </View>
 
@@ -121,40 +102,48 @@ export default function HomeScreen({ navigation }) {
         <Text style={styles.totalSub}>✦ {gastosFiltrados.length} registros</Text>
       </View>
 
-      {/* Filtro de categorias — lista horizontal */}
+      {/* Filtro de categorias */}
       <FlatList
-        horizontal 
-        showsHorizontalScrollIndicator={false} 
+        horizontal
+        showsHorizontalScrollIndicator={false}
         data={CATEGORIAS_FILTRO}
         keyExtractor={(item) => item.nome}
         renderItem={({ item }) => {
           const ativo = categoriaFiltro === item.nome;
-          return (
-            <TouchableOpacity
-              style={[
-                styles.chipFiltro,
-                ativo ? styles.chipFiltroAtivo : null,
-                { backgroundColor: item.cor },
-              ]}
-              onPress={() => setCategoriaFiltro(item.nome)}
-            >
-              <MaterialCommunityIcons name={item.icone} size={14} color={item.corIcone} />
-              <Text style={[styles.chipFiltroTexto, { color: item.corIcone }]}>
-                {' '}{item.nome}
-              </Text>
-            </TouchableOpacity>
-          );
-        }}
+           return (
+    <TouchableOpacity
+      style={[
+        styles.chipFiltro,
+        ativo ? styles.chipFiltroAtivo : null,
+        { backgroundColor: ativo ? item.cor : cores.fundo },
+      ]}
+      onPress={() => setCategoriaFiltro(item.nome)}
+    >
+      <MaterialCommunityIcons name={item.icone} size={14} color={item.corIcone} />
+      <Text style={[styles.chipFiltroTexto, { color: item.corIcone }]}>
+        {' '}{item.nome}
+      </Text>
+      {/* Mostrae um check quando ativo */}
+      {ativo && (
+        <MaterialCommunityIcons
+          name="check-circle"
+          size={12}
+          color={item.corIcone}
+          style={{ marginLeft: 3 }}
+        />
+      )}
+    </TouchableOpacity>
+  );
+}}
         contentContainerStyle={styles.chipsFiltroContainer}
         style={styles.chipsFiltroLista}
       />
 
-      {/* Lista de gastos filtrados */}
+      {/* Lista de gastos */}
       <FlatList
         data={gastosFiltrados}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          
           <ExpenseItem
             gasto={item}
             onExcluir={() => confirmarExclusao(item.id, item.descricao)}
@@ -171,12 +160,12 @@ export default function HomeScreen({ navigation }) {
         contentContainerStyle={{ paddingBottom: 100 }}
       />
 
-      {/* Botão flutuante */}
+      {/* Botão de novo gasto */}
       <TouchableOpacity
         style={styles.fab}
         onPress={() => navigation.navigate('AddExpense')}
       >
-        <MaterialCommunityIcons name="plus" size={20} color="#8a7fc0" />
+        <MaterialCommunityIcons name="plus" size={20} color="#ffffff" />
         <Text style={styles.fabText}>novo gasto</Text>
       </TouchableOpacity>
 
@@ -187,7 +176,7 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f0ede8',
+    backgroundColor: cores.fundo,
     padding: 16,
   },
   mesFiltro: {
@@ -197,46 +186,40 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   setaMes: {
-    backgroundColor: '#f0ede8',
+    backgroundColor: cores.fundo,
     borderRadius: 10,
     padding: 6,
-    shadowColor: '#d8d4ce',
-    shadowOffset: { width: 3, height: 3 },
-    shadowOpacity: 1,
-    shadowRadius: 6,
-    elevation: 3,
+    ...neumorficoPequeno,
   },
   mesTexto: {
     fontSize: 16,
-    fontWeight: '600',
-    color: '#5a5550',
+    fontFamily: fontes.negrito,
+    color: cores.texto,
   },
   totalCard: {
-    backgroundColor: '#f0ede8',
+    backgroundColor: cores.fundo,
     borderRadius: 16,
     padding: 16,
     alignItems: 'center',
     marginBottom: 12,
-    shadowColor: '#d8d4ce',
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
-    shadowRadius: 8,
-    elevation: 4,
+    ...neumorfico,
   },
   totalLabel: {
     fontSize: 11,
-    color: '#9e9891',
+    fontFamily: fontes.normal,
+    color: cores.textoSuave,
     letterSpacing: 1,
   },
   totalValue: {
-    fontSize: 28,
-    fontWeight: '600',
-    color: '#5a5550',
+    fontSize: 32,
+    fontFamily: fontes.negrito,
+    color: cores.texto,
     marginTop: 4,
   },
   totalSub: {
     fontSize: 12,
-    color: '#b5a8d4',
+    fontFamily: fontes.normal,
+    color: cores.roxoClaro,
     marginTop: 4,
   },
   chipsFiltroLista: {
@@ -252,19 +235,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 7,
     borderRadius: 20,
-    shadowColor: '#d8d4ce',
-    shadowOffset: { width: 2, height: 2 },
-    shadowOpacity: 1,
-    shadowRadius: 4,
-    elevation: 2,
+    ...neumorficoPequeno,
   },
-  chipFiltroAtivo: {
-    shadowOffset: { width: -1, height: -1 },
-    elevation: 0,
-    opacity: 0.85,
-  },
+chipFiltroAtivo: {
+  opacity: 1,
+  borderWidth: 1.5,
+  borderColor: 'rgba(0,0,0,0.15)',
+  shadowOffset: { width: -1, height: -1 },
+  elevation: 0,
+},
   chipFiltroTexto: {
     fontSize: 12,
+    fontFamily: fontes.normal,
     fontWeight: '500',
   },
   emptyContainer: {
@@ -274,33 +256,35 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 16,
-    color: '#9e9891',
+    fontFamily: fontes.normal,
+    color: cores.textoSuave,
   },
   emptySubText: {
     fontSize: 13,
-    color: '#b5b0aa',
+    fontFamily: fontes.normal,
+    color: cores.textoMini,
   },
   fab: {
     position: 'absolute',
     bottom: 24,
     left: 16,
     right: 16,
-    backgroundColor: '#f0ede8',
+    backgroundColor: cores.roxo,
     borderRadius: 16,
     padding: 16,
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'center',
     gap: 8,
-    shadowColor: '#d8d4ce',
+    shadowColor: '#8a7fc0',
     shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
+    shadowOpacity: 0.4,
     shadowRadius: 8,
-    elevation: 4,
+    elevation: 6,
   },
   fabText: {
     fontSize: 15,
-    fontWeight: '600',
-    color: '#8a7fc0',
+    fontFamily: fontes.negrito,
+    color: '#ffffff',
   },
 });

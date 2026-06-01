@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { cores, fontes, neumorfico, neumorficoPequeno } from '../styles/styles';
 
 const CATEGORIAS = {
   alimentação: { icone: 'food-fork-drink',                cor: '#fde8ef', corIcone: '#c45b7a' },
@@ -13,14 +14,11 @@ const CATEGORIAS = {
   outros:      { icone: 'dots-horizontal-circle-outline', cor: '#f5f5f5', corIcone: '#9e9891' },
 };
 
-// Agora recebe também onExcluir — a função de excluir vinda do HomeScreen
 export default function ExpenseItem({ gasto, onExcluir }) {
-
   const cat = CATEGORIAS[gasto.categoria] || CATEGORIAS['outros'];
 
   return (
     <View style={styles.container}>
-
       <View style={[styles.catDot, { backgroundColor: cat.cor }]}>
         <MaterialCommunityIcons name={cat.icone} size={20} color={cat.corIcone} />
       </View>
@@ -35,27 +33,21 @@ export default function ExpenseItem({ gasto, onExcluir }) {
         <Text style={styles.data}>{gasto.data}</Text>
       </View>
 
-      {/* Botão de excluir — chama a função onExcluir ao tocar */}
       <TouchableOpacity style={styles.excluirBtn} onPress={onExcluir}>
         <MaterialCommunityIcons name="trash-can-outline" size={18} color="#d4a0b0" />
       </TouchableOpacity>
-
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#f0ede8',
+    backgroundColor: cores.fundo,
     borderRadius: 16,
     padding: 12,
     flexDirection: 'row',
     alignItems: 'center',
-    shadowColor: '#d8d4ce',
-    shadowOffset: { width: 3, height: 3 },
-    shadowOpacity: 1,
-    shadowRadius: 6,
-    elevation: 3,
+    ...neumorfico,
   },
   catDot: {
     width: 42,
@@ -64,18 +56,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
+    ...neumorficoPequeno,
   },
   info: {
     flex: 1,
   },
   descricao: {
     fontSize: 14,
-    fontWeight: '500',
-    color: '#5a5550',
+    fontFamily: fontes.negrito,
+    color: cores.texto,
   },
   categoria: {
     fontSize: 11,
-    color: '#9e9891',
+    fontFamily: fontes.normal,
+    color: cores.textoSuave,
     marginTop: 2,
   },
   direita: {
@@ -84,12 +78,13 @@ const styles = StyleSheet.create({
   },
   valor: {
     fontSize: 14,
-    fontWeight: '600',
-    color: '#8a7fc0',
+    fontFamily: fontes.negrito,
+    color: cores.roxo,
   },
   data: {
     fontSize: 11,
-    color: '#b5b0aa',
+    fontFamily: fontes.normal,
+    color: cores.textoMini,
     marginTop: 2,
   },
   excluirBtn: {

@@ -6,6 +6,7 @@ import {
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { inserirGasto } from '../database/database';
+import { cores, fontes, neumorfico, neumorficoPequeno, neumorficoPressionado } from '../styles/styles';
 
 const CATEGORIAS = [
   { nome: 'alimentação', icone: 'food-fork-drink',                cor: '#fde8ef', corIcone: '#c45b7a' },
@@ -28,33 +29,27 @@ export default function AddExpenseScreen({ navigation }) {
 
   const salvarGasto = () => {
     if (!descricao || !valor || !categoriaSelecionada) {
-      Alert.alert('atenção', 'preencha todos os campos!');
+      Alert.alert('atenção 🦜', 'preencha todos os campos!');
       return;
     }
 
     const valorNumerico = parseFloat(valor.replace(',', '.'));
 
     if (isNaN(valorNumerico) || valorNumerico <= 0) {
-      Alert.alert('atenção', 'informe um valor válido maior que zero!');
+      Alert.alert('atenção 🦜', 'informe um valor válido maior que zero!');
       return;
     }
 
     const dataFormatada = data.toLocaleDateString('pt-BR');
 
-    const gasto = {
-      descricao,
-      categoria: categoriaSelecionada,
-      valor: valorNumerico,
-      data: dataFormatada,
-    };
-
-    inserirGasto(gasto);
+    inserirGasto({ descricao, categoria: categoriaSelecionada, valor: valorNumerico, data: dataFormatada });
     navigation.goBack();
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
 
+      {/* Descrição */}
       <Text style={styles.label}>descrição</Text>
       <View style={styles.inputContainer}>
         <TextInput
@@ -66,6 +61,7 @@ export default function AddExpenseScreen({ navigation }) {
         />
       </View>
 
+      {/* Valor */}
       <Text style={styles.label}>valor (R$)</Text>
       <View style={styles.inputContainer}>
         <TextInput
@@ -78,16 +74,15 @@ export default function AddExpenseScreen({ navigation }) {
         />
       </View>
 
+      {/* Data */}
       <Text style={styles.label}>data</Text>
       <TouchableOpacity
         style={styles.inputContainer}
         onPress={() => setMostrarCalendario(true)}
       >
         <View style={styles.dataButton}>
-          <MaterialCommunityIcons name="calendar-outline" size={18} color="#9e9891" />
-          <Text style={styles.dataText}>
-            {data.toLocaleDateString('pt-BR')}
-          </Text>
+          <MaterialCommunityIcons name="calendar-outline" size={18} color={cores.textoSuave} />
+          <Text style={styles.dataText}>{data.toLocaleDateString('pt-BR')}</Text>
         </View>
       </TouchableOpacity>
 
@@ -103,29 +98,40 @@ export default function AddExpenseScreen({ navigation }) {
         />
       )}
 
+      {/* Categoria */}
       <Text style={styles.label}>categoria</Text>
       <View style={styles.chipsContainer}>
         {CATEGORIAS.map((cat) => {
           const selecionada = categoriaSelecionada === cat.nome;
           return (
-            <TouchableOpacity
-              key={cat.nome}
-              style={[
-                styles.chip,
-                selecionada ? styles.chipAtivo : null,
-                { backgroundColor: cat.cor },
-              ]}
-              onPress={() => setCategoriaSelecionada(cat.nome)}
-            >
-              <MaterialCommunityIcons name={cat.icone} size={16} color={cat.corIcone} />
-              <Text style={styles.chipText}> {cat.nome}</Text>
-            </TouchableOpacity>
+           <TouchableOpacity
+  key={cat.nome}
+  style={[
+    styles.chip,
+    {
+      backgroundColor: selecionada ? cat.corIcone + '22' : cat.cor,
+      borderWidth: selecionada ? 1.5 : 0,
+      borderColor: selecionada ? cat.corIcone : 'transparent',
+    },
+    selecionada ? neumorficoPressionado : neumorficoPequeno,
+  ]}
+  onPress={() => setCategoriaSelecionada(cat.nome)}
+>
+  <MaterialCommunityIcons
+    name={selecionada ? 'check-circle' : cat.icone}
+    size={16}
+    color={cat.corIcone}
+  />
+  <Text style={[styles.chipText, { color: cat.corIcone }]}> {cat.nome}</Text>
+</TouchableOpacity>
           );
         })}
       </View>
 
+      {/* Botão salvar */}
       <TouchableOpacity style={styles.botaoSalvar} onPress={salvarGasto}>
-        <Text style={styles.botaoSalvarText}>✦ salvar gasto</Text>
+        <MaterialCommunityIcons name="check" size={18} color="#ffffff" />
+        <Text style={styles.botaoSalvarText}>salvar gasto</Text>
       </TouchableOpacity>
 
       <View style={{ height: 40 }} />
@@ -137,29 +143,27 @@ export default function AddExpenseScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f0ede8',
+    backgroundColor: cores.fundo,
     padding: 16,
   },
   label: {
     fontSize: 11,
-    color: '#9e9891',
+    fontFamily: fontes.normal,
+    color: cores.textoSuave,
     letterSpacing: 1,
     marginBottom: 6,
     marginTop: 16,
   },
   inputContainer: {
-    backgroundColor: '#f0ede8',
+    backgroundColor: cores.fundo,
     borderRadius: 12,
-    shadowColor: '#d8d4ce',
-    shadowOffset: { width: 2, height: 2 },
-    shadowOpacity: 1,
-    shadowRadius: 4,
-    elevation: 0,
+    ...neumorficoPressionado,
   },
   input: {
     padding: 14,
     fontSize: 15,
-    color: '#5a5550',
+    fontFamily: fontes.normal,
+    color: cores.texto,
   },
   dataButton: {
     flexDirection: 'row',
@@ -169,7 +173,8 @@ const styles = StyleSheet.create({
   },
   dataText: {
     fontSize: 15,
-    color: '#5a5550',
+    fontFamily: fontes.normal,
+    color: cores.texto,
   },
   chipsContainer: {
     flexDirection: 'row',
@@ -183,37 +188,30 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 20,
-    shadowColor: '#d8d4ce',
-    shadowOffset: { width: 2, height: 2 },
-    shadowOpacity: 1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  chipAtivo: {
-    shadowOffset: { width: -1, height: -1 },
-    elevation: 0,
-    opacity: 0.85,
   },
   chipText: {
     fontSize: 13,
-    color: '#5a5550',
+    fontFamily: fontes.normal,
     fontWeight: '500',
   },
   botaoSalvar: {
-    backgroundColor: '#f0ede8',
+    backgroundColor: cores.roxo,
     borderRadius: 16,
     padding: 16,
     alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 8,
     marginTop: 24,
-    shadowColor: '#d8d4ce',
+    shadowColor: '#8a7fc0',
     shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
+    shadowOpacity: 0.4,
     shadowRadius: 8,
-    elevation: 4,
+    elevation: 6,
   },
   botaoSalvarText: {
     fontSize: 15,
-    fontWeight: '600',
-    color: '#8a7fc0',
+    fontFamily: fontes.negrito,
+    color: '#ffffff',
   },
 });
