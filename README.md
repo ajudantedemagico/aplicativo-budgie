@@ -66,22 +66,4 @@ Escaneie o QR code com o **Expo Go** no celular e o app abrirá automaticamente.
 
 ---
 
-## ✦ estrutura do projeto
-
-src/
-├── screens/
-│   ├── HomeScreen.js        # tela inicial com listagem e filtros
-│   ├── AddExpenseScreen.js  # tela de cadastro de gastos
-│   └── AboutScreen.js       # tela sobre o projeto
-├── components/
-│   ├── ExpenseItem.js       # componente de cada item da lista
-│   └── ExpenseChart.js      # gráfico de pizza interativo
-├── database/
-│   └── database.js          # configuração e funções do SQLite
-├── navigation/
-│   └── routes.js            # configuração das rotas
-└── styles/
-└── styles.js            # cores, fontes e estilos globais
-
-
-### feito com ♡ e muito café
+### feito com ♡ e muito café  🪄
