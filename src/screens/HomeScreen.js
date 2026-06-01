@@ -6,6 +6,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { listarGastos, excluirGasto } from '../database/database';
 import ExpenseItem from '../components/ExpenseItem';
 import { cores, fontes, neumorfico, neumorficoPequeno } from '../styles/styles';
+import ExpenseChart from '../components/ExpenseChart';
 
 const CATEGORIAS_FILTRO = [
   { nome: 'todas',       icone: 'filter-outline',                cor: '#f0ede8', corIcone: '#9e9891' },
@@ -138,6 +139,10 @@ export default function HomeScreen({ navigation }) {
         contentContainerStyle={styles.chipsFiltroContainer}
         style={styles.chipsFiltroLista}
       />
+{/* Gráfico de pizza */}
+{gastosFiltrados.length > 0 && (
+  <ExpenseChart gastos={gastosFiltrados} />
+)}
 
       {/* Lista de gastos */}
       <FlatList

@@ -29,14 +29,14 @@ export default function AddExpenseScreen({ navigation }) {
 
   const salvarGasto = () => {
     if (!descricao || !valor || !categoriaSelecionada) {
-      Alert.alert('atenção 🦜', 'preencha todos os campos!');
+      Alert.alert('atenção', 'preencha todos os campos!');
       return;
     }
 
     const valorNumerico = parseFloat(valor.replace(',', '.'));
 
     if (isNaN(valorNumerico) || valorNumerico <= 0) {
-      Alert.alert('atenção 🦜', 'informe um valor válido maior que zero!');
+      Alert.alert('atenção ', 'informe um valor válido maior que zero!');
       return;
     }
 
