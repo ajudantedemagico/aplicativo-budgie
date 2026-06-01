@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from '../screens/HomeScreen';
 import AddExpenseScreen from '../screens/AddExpenseScreen';
+import AboutScreen from '../screens/AboutScreen';
 
 const Stack = createStackNavigator();
 
@@ -11,7 +12,7 @@ export default function Routes() {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
-          headerStyle: { backgroundColor: '#e3c2ee' },
+          headerStyle: { backgroundColor: '#ecdbf5' },
           headerTintColor: '#5a5550',
           headerTitleStyle: {
             fontFamily: 'KleeOne_600SemiBold',
@@ -30,6 +31,11 @@ export default function Routes() {
           component={AddExpenseScreen}
           options={{ title: 'novo gasto' }}
         />
+        <Stack.Screen
+           name="About"
+           component={AboutScreen}
+           options={{ title: 'sobre ✦' }}
+/>
       </Stack.Navigator>
     </NavigationContainer>
   );

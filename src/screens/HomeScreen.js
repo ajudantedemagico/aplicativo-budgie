@@ -86,15 +86,23 @@ export default function HomeScreen({ navigation }) {
     <View style={styles.container}>
 
       {/* Navegação de mês */}
-      <View style={styles.mesFiltro}>
-        <TouchableOpacity style={styles.setaMes} onPress={mesAnterior}>
-          <MaterialCommunityIcons name="chevron-left" size={22} color={cores.texto} />
-        </TouchableOpacity>
-        <Text style={styles.mesTexto}>{MESES[mesFiltro]} {anoFiltro}</Text>
-        <TouchableOpacity style={styles.setaMes} onPress={proximoMes}>
-          <MaterialCommunityIcons name="chevron-right" size={22} color={cores.texto} />
-        </TouchableOpacity>
-      </View>
+<View style={styles.mesFiltro}>
+  <TouchableOpacity style={styles.setaMes} onPress={mesAnterior}>
+    <MaterialCommunityIcons name="chevron-left" size={22} color={cores.texto} />
+  </TouchableOpacity>
+  <Text style={styles.mesTexto}>{MESES[mesFiltro]} {anoFiltro}</Text>
+  <TouchableOpacity style={styles.setaMes} onPress={proximoMes}>
+    <MaterialCommunityIcons name="chevron-right" size={22} color={cores.texto} />
+  </TouchableOpacity>
+</View>
+
+{/* Botão sobre — canto superior direito */}
+<TouchableOpacity
+  style={styles.sobreBtn}
+  onPress={() => navigation.navigate('About')}
+>
+  <MaterialCommunityIcons name="information-outline" size={20} color={cores.textoSuave} />
+</TouchableOpacity>
 
       {/* Card do total */}
       <View style={styles.totalCard}>
@@ -292,4 +300,5 @@ chipFiltroAtivo: {
     fontFamily: fontes.negrito,
     color: '#ffffff',
   },
+  
 });
